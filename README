@@ -1,0 +1,15 @@
+This project is used to calculate electron trajectories in a double-slit experiment as predicted by Bohmian Mechanics.
+
+The Crank-Nicolson method is used to solve Schrödinger's equation in one dimension. The resulting wavefunction is then used to calculate the probability density and current, so the Guiding Equation may be solved.
+
+The values of |psi|^2 are stored in "psi2.dat" while "traj.dat" holds the trajectories for the different electrons. As for now, we are simulating a one-dimensional problem, so the x-position of the electrons are given by x=vx*t, where "vx" is a constant velocity and "t" is the time.
+
+FILE FORMAT:
+psi2.dat. Columns are: time (ns), x-pos (cm), y-pos (nm), |psi(t,x,y)|^2
+	Every blank row accounts for a new time-step.
+
+tarj.dat. Columns are: time (ns), x-pos (cm), y-pos (nm)
+	Every blank row accounts for a new electron.
+
+
+
