@@ -1,4 +1,4 @@
-This project is used to calculate electron trajectories in a double-slit experiment as predicted by Bohmian Mechanics.
+This project is used to calculate electron trajectories in a double-slit experiment as predicted by Bohmian Mechanics. We intend to replicate the results presented by Gondran, M., & Gondran, A. (2014) on their paper Measurement in the de Broglie-Bohm interpretation: double-slit, Stern-Gerlach, and EPR-B. Physics Research International, 2014.
 
 The Crank-Nicolson method is used to solve Schrödinger's equation in one dimension. The resulting wavefunction is then used to calculate the probability density and current, so the Guiding Equation may be solved. The method is implemented on file "CN1D.cpp".
 
