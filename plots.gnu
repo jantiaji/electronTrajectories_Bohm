@@ -13,9 +13,9 @@ reset
 	
 	#set key at 2.8,2.3
     #set key spacing 0.8
-    set key samplen 2
-    set key box 3
-    set key width 3
+    #set key samplen 2
+    #set key box 3
+    #set key width 3
     #set key height 0.3
     #set key reverse Left
     
@@ -47,7 +47,7 @@ reset
 	
 	#do for [t=0:500] {# plot sprintf('punto1_%d.dat', i) using 1:4; pause 0.5 
 	
-	tt=350
+	tt=500
 	yy=150
 	
 	##set label '\small t=2 ns' at -1,0.18
@@ -71,6 +71,7 @@ reset
 	if(1==2){
 	set xlabel '$y$ [$\mu$m]'
 	set ylabel '$|\Psi_{A}+\Psi_{B}|^{2}$' offset 1.5
+	#set xr [-1:1]
     plot	'psi2.dat' every :::tt::tt using 3:4 title '\scriptsize Numeric' with line lw 4 dashtype 1,\
     		 g(x*10**(-6),t) title '\scriptsize Analitic' with line lw 4
     }
@@ -83,6 +84,28 @@ reset
 	#set yr [0:30]
     	plot 'psi2.dat' every :::00::00 using 2:5 notitle '\scriptsize Trajectories' with line lw 4 dashtype 1,\
     }
+    
+    
+    ## Test Gradient
+    if(1==2){
+    
+    set key at 2.8,1.3
+    #set key spacing 0.8
+    #set key above
+    #set key samplen 2
+    #set key box 3
+    #set key width 3
+    #set key height 0.3
+    #set key reverse Left
+    
+    set xlabel '$y$ [$\mu$m]'
+	set ylabel '$f(y)$' offset 1.5
+    #set xr [0:30]
+	set yr [-1.5:1.5]
+    plot	'testGrad.dat' using 1:2 title '\scriptsize $\sin(x)$' with line lw 4 dashtype 1, \
+    		'testGrad.dat' using 1:3 title '\scriptsize $\nabla \sin(x)$' with line lw 4 dashtype 1
+    }
+    
     
     ## Trajectories
     if(1==1){

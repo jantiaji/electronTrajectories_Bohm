@@ -23,14 +23,14 @@ const double yMin = -10, yMax = 10; // um
 const double tMin = 0, tMax = 2; // ns
 
 const int ny = 700;
-const int nt = 700;
+const int nt = 500;
 
 const double hy = (double)(yMax-yMin)/ny;
 const double ht = (double)(tMax-tMin)/nt;
 
 const complex<double> dy = D*ht/(2*hy*hy);
 
-const int ne = 50;
+const int ne = 100;
 
 bool done = false;
 
@@ -99,6 +99,7 @@ int main(void){
 	for(int ti=1;ti<=nt;ti++){
 		done = false;
 
+		//double t = tMin + ti*ht;
 		// show progress bar
 		float percentage = (float) ti/nt;
 		progress(percentage);
@@ -116,6 +117,12 @@ int main(void){
 				matrix2[ti][yi] = (dy/(1.+(2.*dy)))*(matrix[ti][yi+1]+matrix[ti][yi-1]+matrix[ti-1][yi+1]+matrix[ti-1][yi-1])
 									+((1.-2.*dy)/(1.+2.*dy))*matrix[ti-1][yi];
 				
+				/*if( (t-0<tolerance) && ((y>0.59) || (y<-0.59) || ( (y>-0.41)&&(y<0.41) ) ) ){
+					matrix2[ti][yi] = 0;
+					matrix[ti][yi] = 0;
+				}*/
+
+
 				if( abs(matrix[ti][yi]-matrix2[ti][yi]) > tolerance ){
 					done = done & false;
 				}
@@ -154,6 +161,7 @@ int main(void){
 			double oldY = elecMatrix[ei].getPos(ti-1);
 			int yIndex = findIndex(oldY,ny,yMin,yMax);
 
+			//double newY = oldY;
 			//cout<<yIndex<<"\n";
 			double newY = real(getP(matrix2,ti,yIndex))*ht+elecMatrix[ei].getPos(ti-1);
 
@@ -213,8 +221,8 @@ int main(void){
 double psi0(double y){
 	double sigmay = 0.09; //um
 	double mu = 0.5; // um
-	return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
-	//return (fabs(y-mu)<2*sigmay)? 1 : (fabs(y+mu)<2*sigmay)? 1 : 0; // barrier
+	//return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
+	return (fabs(y-mu)<2*sigmay)? 1 : (fabs(y+mu)<2*sigmay)? 1 : 0; // barrier
 	//return 10*cos(y);	
 }
 
@@ -237,14 +245,14 @@ double getRho(complex <double> psi){
 complex <double> getP(complex <double> matrix[nt+1][ny+1],int time, int pos){
 	complex <double> current;
 
-	current = conj(matrix[time][pos])*getGradient(matrix,time,pos,hy) - matrix[time][pos]*conj(getGradient(matrix,time,pos,hy));
+	current = (conj(matrix[time][pos])*getGradient(matrix,time,pos,hy)) - (matrix[time][pos]*conj(getGradient(matrix,time,pos,hy)));
 	current = -current*hbar_m*i/2.;
 
 	return current/getRho(matrix[time][pos]);	
 }
 
 complex <double> getGradient(complex <double> matrix[nt+1][ny+1],int time, int pos,double step){
-	return (matrix[time][pos+1]-matrix[time][pos])/step;
+	return (matrix[time][pos+1]-matrix[time][pos-1])/(2.*step);
 }
 
 void progress(float percentage){
