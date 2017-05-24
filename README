@@ -13,3 +13,6 @@ tarj.dat. Columns are: time (ns), x-pos (cm), y-pos (nm)
 
 GNUPLOT is used to plot the wavefuncion as a function of time and electron trajectories. Edit "plots.gnu" as desired. To generate the plots, run "plotGen.sh".
 
+
+May 24: The function "getGradient" was changed to use Central Difference so the trajectories were symmetric.
+
