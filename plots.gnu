@@ -14,8 +14,8 @@ reset
 	#set key at 2.8,2.3
     #set key spacing 0.8
     #set key samplen 2
-    #set key box 3
-    #set key width 3
+    set key box 3
+    set key width 3
     #set key height 0.3
     #set key reverse Left
     
@@ -50,10 +50,19 @@ reset
 	tt=500
 	yy=150
 	
-	##set label '\small t=2 ns' at -1,0.18
+	# Labels square
+	#set label '\small t=2 ns' at 5.5,0.13
 	#set label '\small t=1 ns' at -1,0.315
-	#set label '\small t=0.2 ns' at -0.35,0.45
-	#set label '\small t=0.02 ns' at -0.2,1.17
+	#set label '\small t=0.2 ns' at 1,0.65
+	#set label '\small t=0.02 ns' at 1,2.2
+	#set label '\small t=0 ns' at 1.1,0.9
+	
+	# Labels gaussian
+	set label '\small t=2 ns' at -3.0,0.18
+	#set label '\small t=1 ns' at -1.5,0.315
+	#set label '\small t=0.2 ns' at -0.6,0.45
+	#set label '\small t=0.02 ns' at -0.35,1.34
+	#set label '\small t=0 ns' at 1.1,0.9
 	
 	# Functions to plot
 	set samples 10000
@@ -68,12 +77,13 @@ reset
 	
 	g(x,t)=2*(A**2)*exp(-(2*a*(x**2+(d/2)**2)/(1+4*(k*t)**2)))*(cosh(4*a*(d/2)*x/(1+4*(k*t)**2))+cos(8*a*(d/2)*x*(k*t)/(1+4*(k*t)**2)))/(sqrt(1+4*(k*t)**2))
 
-	if(1==2){
+	if(1==1){
 	set xlabel '$y$ [$\mu$m]'
 	set ylabel '$|\Psi_{A}+\Psi_{B}|^{2}$' offset 1.5
-	#set xr [-1:1]
-    plot	'psi2.dat' every :::tt::tt using 3:4 title '\scriptsize Numeric' with line lw 4 dashtype 1,\
-    		 g(x*10**(-6),t) title '\scriptsize Analitic' with line lw 4
+	set xr [-10:10]
+	set yr[0:0.2]
+    plot	'psi2gauss.dat' every :::tt::tt using 3:4 title '\scriptsize Numeric' with line lw 4 dashtype 1,\
+    		 g(x*10**(-6),t) title '\scriptsize Analytic' with line lw 4
     }
     
     ## Wavefunction
@@ -108,7 +118,7 @@ reset
     
     
     ## Trajectories
-    if(1==1){
+    if(1==2){
        
     set arrow from 0,0.59 to 0,5 nohead front lw 5
     set arrow from 0,-0.59 to 0,-5 nohead front lw 5
@@ -118,7 +128,7 @@ reset
     set xlabel '$x$ [cm]'
 	set ylabel '$y$ [$\mu$m]' offset 0
     
-    set xr [-5:36]
+    set xr [-5:35]
 	set yr [-5:5]
 	
 	set contour base

@@ -5,6 +5,8 @@
 #include <complex>
 #include <iostream>
 #include <fstream>
+#include <time.h> 
+#include "Random64.h"
 using namespace std;
 
 //const double hbar = 1.05*pow(10,-34);
@@ -18,11 +20,11 @@ const double vx = 18; // cm/ns
 const complex <double> D = i*hbar_m/(2.); 
 //const complex <double> D = 0.5;
 
-const double tolerance = 1e-13;
+const double tolerance = 1e-9;
 const double yMin = -10, yMax = 10; // um
 const double tMin = 0, tMax = 2; // ns
 
-const int ny = 700;
+const int ny = 2000;
 const int nt = 500;
 
 const double hy = (double)(yMax-yMin)/ny;
@@ -30,7 +32,7 @@ const double ht = (double)(tMax-tMin)/nt;
 
 const complex<double> dy = D*ht/(2*hy*hy);
 
-const int ne = 100;
+const int ne = 50;
 
 bool done = false;
 
@@ -85,6 +87,47 @@ double Electron::getPos(int ti){
 
 int main(void){
 
+	// Creating electrons
+	Electron elecMatrix[ne];
+
+	Crandom RanP(time(NULL));
+  
+  	/*for(int i=0; i<10;i++){
+    	double num = (RanP.r())+0;
+    	cout<<num<<"\n";
+  	}*/
+
+    int ei=0;
+    int yi=ny/2;
+    while(ei<ne/2){
+    	bool done=0;
+    	while(yi<=ny & ~done){
+    		double y = yMin+yi*hy;
+    		double num = (RanP.r());
+    		//cout<<y<<"\t"<<psi0(y)<<"\n";
+    		if(num<psi0(y)){
+    			//cout<<y<<"\n";
+    			elecMatrix[ei].setPos(y,0);
+    			elecMatrix[ei+ne/2].setPos(-y,0);
+    			ei++;
+    			done=true;
+    			//cout<<"inside\t"<<ei<<"\n";
+    		}
+    		yi++;
+    		if(y>1){
+    			yi=ny/2;
+    		}
+    	}
+    	//cout<<ei<<"\n";
+    }
+    	/*for(int yi=ny/2;yi<=ny;yi++){
+    		
+    		//cout<<num<<"\n";
+    		
+    	}*/
+    //}
+
+
 	// initial conditions
 	for(int yi=0; yi<=ny;yi++){
 		double y = (double) yMin + yi*hy;
@@ -134,15 +177,11 @@ int main(void){
 	std::cout<<"\n";
 	// END OF Crank-Nicolson for |psiA+psiB|
 
-
-	// Creating electrons
-	Electron elecMatrix[ne];
-
-	for(int ei=0;ei<ne/2;ei++){
-		double initPos = (0.5-0.09)+(2*0.18/ne)*ei;
+	/*for(int ei=0;ei<ne/2;ei++){
+		double initPos = (0.5-0.15)+(2*0.3/ne)*ei; //0.09, 0.18 // 0.2,0.4
 		elecMatrix[ei].setPos(initPos,0);
 		elecMatrix[ei+ne/2].setPos(-initPos,0);
-	}
+	}*/
 	
 
 	// Electron trajectories
@@ -192,7 +231,7 @@ int main(void){
 
 	// Export Data
 	cout<<"Exporting data to file psi2.dat...\n";
-	ofstream psiFile ("psi2.dat");
+	ofstream psiFile ("psi2gauss.dat");
 	for(int ti=0;ti<=nt;ti++){
 		float percentage = (float) ti/nt;
 		progress(percentage);
@@ -211,7 +250,6 @@ int main(void){
 	return 0;
 }
 
-
 //////////////////////////////////
 //////////////////////////////////
 ////// Function definitions //////
@@ -221,8 +259,8 @@ int main(void){
 double psi0(double y){
 	double sigmay = 0.09; //um
 	double mu = 0.5; // um
-	//return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
-	return (fabs(y-mu)<2*sigmay)? 1 : (fabs(y+mu)<2*sigmay)? 1 : 0; // barrier
+	return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
+	//return (fabs(y-mu)<sigmay)? 1 : (fabs(y+mu)<sigmay)? 1 : 0; // barrier
 	//return 10*cos(y);	
 }
 
