@@ -214,7 +214,7 @@ int main(void){
 
 	// Export Data
 	cout<<"\nExporting data to file traj.dat...\n";
-	ofstream trajFile ("traj.dat");
+	ofstream trajFile ("trajsquare.dat");
 	for(int ei=0;ei<ne;ei++){
 		float percentage = (float) (ei+1)/ne;
 		progress(percentage);
@@ -231,7 +231,7 @@ int main(void){
 
 	// Export Data
 	cout<<"Exporting data to file psi2.dat...\n";
-	ofstream psiFile ("psi2gauss.dat");
+	ofstream psiFile ("psi2square.dat");
 	for(int ti=0;ti<=nt;ti++){
 		float percentage = (float) ti/nt;
 		progress(percentage);
@@ -259,8 +259,8 @@ int main(void){
 double psi0(double y){
 	double sigmay = 0.09; //um
 	double mu = 0.5; // um
-	return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
-	//return (fabs(y-mu)<sigmay)? 1 : (fabs(y+mu)<sigmay)? 1 : 0; // barrier
+	//return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
+	return (fabs(y-mu)<sigmay)? 1 : (fabs(y+mu)<sigmay)? 1 : 0; // barrier
 	//return 10*cos(y);	
 }
 

@@ -58,7 +58,7 @@ reset
 	#set label '\small t=0 ns' at 1.1,0.9
 	
 	# Labels gaussian
-	set label '\small t=2 ns' at -3.0,0.18
+	#set label '\small t=2 ns' at -3.0,0.18
 	#set label '\small t=1 ns' at -1.5,0.315
 	#set label '\small t=0.2 ns' at -0.6,0.45
 	#set label '\small t=0.02 ns' at -0.35,1.34
@@ -77,7 +77,7 @@ reset
 	
 	g(x,t)=2*(A**2)*exp(-(2*a*(x**2+(d/2)**2)/(1+4*(k*t)**2)))*(cosh(4*a*(d/2)*x/(1+4*(k*t)**2))+cos(8*a*(d/2)*x*(k*t)/(1+4*(k*t)**2)))/(sqrt(1+4*(k*t)**2))
 
-	if(1==1){
+	if(1==2){
 	set xlabel '$y$ [$\mu$m]'
 	set ylabel '$|\Psi_{A}+\Psi_{B}|^{2}$' offset 1.5
 	set xr [-10:10]
@@ -118,7 +118,7 @@ reset
     
     
     ## Trajectories
-    if(1==2){
+    if(1==1){
        
     set arrow from 0,0.59 to 0,5 nohead front lw 5
     set arrow from 0,-0.59 to 0,-5 nohead front lw 5
@@ -128,7 +128,7 @@ reset
     set xlabel '$x$ [cm]'
 	set ylabel '$y$ [$\mu$m]' offset 0
     
-    set xr [-5:35]
+    set xr [-5:45]
 	set yr [-5:5]
 	
 	set contour base
@@ -137,8 +137,9 @@ reset
 	set palette rgbformula -7,-7,2
 	set cbrange [0:0.5]
 	
-   	plot	'traj.dat' every :::00::1000 using 2:3:(0) notitle with line lw 0 dashtype 1, \
-    		'trajPrev.dat' every :::00::1000 using (-$2):3:(0) notitle with line lw 0 dashtype 1 lc 1
+   	plot	'trajsquare.dat' every :::00::1000 using 2:3:(0) notitle with line lw 0 dashtype 1 lc 4, \
+    		'trajPrev.dat' every :::00::1000 using (-$2):3:(0) notitle with line lw 0 dashtype 1 lc 4, \
+    		'psi2square.dat' every :::tt::tt using (40*$4+36):3 notitle '\scriptsize Numeric' with line lw 4 dashtype 1
     		 
    	
    	#set isosample 2
