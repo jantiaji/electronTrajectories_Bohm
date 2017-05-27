@@ -13,6 +13,8 @@ tarj.dat. Columns are: time (ns), x-pos (cm), y-pos (nm)
 
 GNUPLOT is used to plot the wavefuncion as a function of time and electron trajectories. Edit "plots.gnu" as desired. To generate the plots, run "plotGen.sh". The plot will be stored in the file imgs/RENDER.pdf.
 
+File "cn2D.cpp" implements the Crank-Nicolson Method in 2D. It is not fully tested and is not used in our implementation.
+File "Random64.h" contains the Class Crandom that generates 64-bit random numbers. It was written by Jose Daniel Muñoz, Teacher at Universidad Nacional de Colombia.
 
 May 24: The function "getGradient" was changed to use Central Difference so the trajectories were symmetric.
 

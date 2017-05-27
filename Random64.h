@@ -1,8 +1,11 @@
+// Random Number Generator
+// Author: J.D. Muñoz. Universidad Nacional de Colombia
+
 #include<iostream>
 #include<cmath>
 using namespace std;
 
-//Constantes del generador aleatorio
+//Constants of the random Generator
 class Crandom{
   unsigned long long u,v,w;
 public:
