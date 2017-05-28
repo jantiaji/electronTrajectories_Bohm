@@ -34,7 +34,7 @@ const double ht = (double)(tMax-tMin)/nt;
 
 const complex<double> dy = D*ht/(2*hy*hy);
 
-const int ne = 4000;
+const int ne = 9000;
 
 bool done = false;
 
@@ -123,26 +123,20 @@ int main(void){
 	}*/
 
 	Crandom RanP(time(NULL));
-  
+
 	// Symmetric initial conditions
     int ei=0;
-    int yi=ny2/2;
     while(ei<ne/2){
-    	bool done=0;
-    	while(yi<=ny2 & ~done){
-    		double y = yMin+yi*hy2;
-    		double num = (RanP.r());
-    		if(num<psi0(y)){
-    			elecMatrix[ei].setPos(y,0);
-    			elecMatrix[ei+ne/2].setPos(-y,0);
-    			ei++;
-    			done=true;
-    		}
-    		yi++;
-    		if(y>1){
-    			yi=ny2/2;
-    		}
-    	}
+    	double num = (RanP.r());
+
+		int num2 = (int) (ny2/2*RanP.r())+ny2/2;
+		double y = yMin+num2*hy2;
+
+		if(num<psi0(y)){
+			elecMatrix[ei].setPos(y,0);
+			elecMatrix[ei+ne/2].setPos(-y,0);
+			ei++;
+		}
     }
 
     // Asymmetric inicial conditions
