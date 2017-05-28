@@ -92,7 +92,7 @@ reset
 	set ylabel '$|\Psi_{A}+\Psi_{B}|^{2}$' offset 1.5
     #set xr [0:30]
 	#set yr [0:30]
-    	plot 'psi2.dat' every :::00::00 using 2:5 notitle '\scriptsize Trajectories' with line lw 4 dashtype 1,\
+    	plot 'data/psi2.dat' every :::00::00 using 2:5 notitle '\scriptsize Trajectories' with line lw 4 dashtype 1,\
     }
     
     
@@ -112,17 +112,17 @@ reset
 	set ylabel '$f(y)$' offset 1.5
     #set xr [0:30]
 	set yr [-1.5:1.5]
-    plot	'testGrad.dat' using 1:2 title '\scriptsize $\sin(x)$' with line lw 4 dashtype 1, \
-    		'testGrad.dat' using 1:3 title '\scriptsize $\nabla \sin(x)$' with line lw 4 dashtype 1
+    plot	'data/testGrad.dat' using 1:2 title '\scriptsize $\sin(x)$' with line lw 4 dashtype 1, \
+    		'data/testGrad.dat' using 1:3 title '\scriptsize $\nabla \sin(x)$' with line lw 4 dashtype 1
     }
     
     
     ## Trajectories
-    if(1==1){
+    if(1==2){
        
-    set arrow from 0,0.59 to 0,5 nohead front lw 5
-    set arrow from 0,-0.59 to 0,-5 nohead front lw 5
-    set arrow from 0,0.41 to 0,-0.41 nohead front lw 5
+    set arrow from -0.1,0.59 to -0.1,5 nohead front lw 5
+    set arrow from -0.1,-0.59 to -0.1,-5 nohead front lw 5
+    set arrow from -0.1,0.41 to -0.1,-0.41 nohead front lw 5
 	
     set key nobox
     set xlabel '$x$ [cm]'
@@ -137,13 +137,13 @@ reset
 	set palette rgbformula -7,-7,2
 	set cbrange [0:0.5]
 	
-   	plot	'trajsquare.dat' every :::00::1000 using 2:3:(0) notitle with line lw 0 dashtype 1 lc 4, \
-    		'trajPrev.dat' every :::00::1000 using (-$2):3:(0) notitle with line lw 0 dashtype 1 lc 4, \
-    		'psi2square.dat' every :::tt::tt using (40*$4+36):3 notitle '\scriptsize Numeric' with line lw 4 dashtype 1
+   	plot	'data/traj.dat' every :::00::500 using 2:3:(0) notitle with line lw 0 dashtype 1 lc 4, \
+    		'data/trajPrev.dat' every :::00::2000 using (-$2):3:(0) notitle with line lw 0 dashtype 1 lc 4, \
+    		'data/psi2.dat' every :::tt-1::tt-1 using (40*$4+36):3 notitle '\scriptsize Numeric' with line lw 4 dashtype 1
     		 
    	
    	#set isosample 2
-    #splot	'psi2.dat' using 2:3:4:4 with pm3d notitle
+    #splot	'data/psi2.dat' using 2:3:4:4 with pm3d notitle
     
 	#set hidden3d
 	#set dgrid3d ny,nx
@@ -159,9 +159,33 @@ reset
 	#set dgrid3d
 	
 	#do for [tt=0:500] {
-    	#splot 'psi2.dat' using 2:3:4:4 with pm3d notitle
+    	#splot 'data/psi2.dat' using 2:3:4:4 with pm3d notitle
     	#}
     }
     
+    
+    #### Histogram ####
+	if(1==1){
+	#set style fill solid 0.5
+	
+	#set ytics 0,3,6
+	#set xtics 5,5,50
+	
+	unset key
+	
+	set xlabel 'Posici\''{o}n'
+	set ylabel 'Frecuencia' offset 0
+	
+	set xr [-5:5]
+	#set yr [0:8]
+
+	#set ylabel 'ylabel 1' offset 1
+	#unset xlabel
+	plot 'data/histogram.dat' using 1:2 notitle '\scriptsize 850 V' with boxes lc 2, \
+		 'data/psi2.dat' every :::tt-1::tt-1 using 3:(2000*$4) notitle '\scriptsize Numeric' with line lw 4 dashtype 1 lc 3
+	
+		
+	}
+	#### END Histogram ####
     
 	

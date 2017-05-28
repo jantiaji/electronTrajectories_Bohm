@@ -20,19 +20,21 @@ const double vx = 18; // cm/ns
 const complex <double> D = i*hbar_m/(2.); 
 //const complex <double> D = 0.5;
 
-const double tolerance = 1e-9;
+const double tolerance = 1e-12;
 const double yMin = -10, yMax = 10; // um
 const double tMin = 0, tMax = 2; // ns
 
-const int ny = 2000;
+const int ny = 1000;
+const int ny2 = 7000;
 const int nt = 500;
 
 const double hy = (double)(yMax-yMin)/ny;
+const double hy2 = (double)(yMax-yMin)/ny2;
 const double ht = (double)(tMax-tMin)/nt;
 
 const complex<double> dy = D*ht/(2*hy*hy);
 
-const int ne = 50;
+const int ne = 10000;
 
 bool done = false;
 
@@ -63,6 +65,31 @@ int findIndex(double num, int nNum, double min, double max);
 //////////////////////////////////
 //////////////////////////////////
 
+// Electron Beam
+class Beam{
+	int hist[ny];
+
+public:
+	Beam();
+	void increaseFreq(int yi);
+	int getFreq(int yi);
+};
+
+Beam::Beam(void){
+	for(int yi=0;yi<ny;yi++){
+		hist[yi]=0;
+	}
+};
+
+void Beam::increaseFreq(int yi){
+	hist[yi]++;
+};
+
+int Beam::getFreq(int yi){
+	return hist[yi];
+};
+
+// Single Electron
 class Electron {
 	double posY[nt];
 
@@ -79,6 +106,8 @@ double Electron::getPos(int ti){
 	return posY[ti];
 };
 
+Electron elecMatrix[ne];
+
 //////////////////////////////////
 //////////////////////////////////
 //////////// Program /////////////
@@ -88,47 +117,62 @@ double Electron::getPos(int ti){
 int main(void){
 
 	// Creating electrons
-	Electron elecMatrix[ne];
+	Beam electronBeam;
+	/*for(int yi=0;yi<ny;yi++){
+		cout<<electronBeam.getFreq(yi)<<"\n";
+	}*/
 
 	Crandom RanP(time(NULL));
   
-  	/*for(int i=0; i<10;i++){
-    	double num = (RanP.r())+0;
-    	cout<<num<<"\n";
-  	}*/
-
-    int ei=0;
-    int yi=ny/2;
+	// Symmetric initial conditions
+    /*int ei=0;
+    int yi=ny2/2;
     while(ei<ne/2){
     	bool done=0;
-    	while(yi<=ny & ~done){
-    		double y = yMin+yi*hy;
+    	while(yi<=ny2 & ~done){
+    		double y = yMin+yi*hy2;
     		double num = (RanP.r());
-    		//cout<<y<<"\t"<<psi0(y)<<"\n";
     		if(num<psi0(y)){
     			//cout<<y<<"\n";
     			elecMatrix[ei].setPos(y,0);
     			elecMatrix[ei+ne/2].setPos(-y,0);
     			ei++;
     			done=true;
-    			//cout<<"inside\t"<<ei<<"\n";
     		}
     		yi++;
     		if(y>1){
-    			yi=ny/2;
+    			yi=ny2/2;
     		}
     	}
-    	//cout<<ei<<"\n";
+    }*/
+
+    // Asymmetric inicial conditions
+    int ei=0;
+    int yi=0;
+    while(ei<ne){    	
+    	bool done=0;
+    	while(yi<=ny2 & ~done){
+    		double y = yMin+yi*hy2;
+    		double num = (RanP.r());
+    		if(num<psi0(y)){
+    			elecMatrix[ei].setPos(y,0);
+    			ei++;
+    			done=true;
+    		}
+    		yi++;
+    		if(yi==ny2){
+    			yi=0;
+    		}
+    	}
     }
-    	/*for(int yi=ny/2;yi<=ny;yi++){
-    		
-    		//cout<<num<<"\n";
-    		
-    	}*/
-    //}
 
+    /*for(int ei=0;ei<ne/2;ei++){
+		double initPos = (0.5-0.15)+(2*0.3/ne)*ei; //0.09, 0.18 // 0.2,0.4
+		elecMatrix[ei].setPos(initPos,0);
+		elecMatrix[ei+ne/2].setPos(-initPos,0);
+	}*/
 
-	// initial conditions
+	// initial wavefunction
 	for(int yi=0; yi<=ny;yi++){
 		double y = (double) yMin + yi*hy;
 		matrix[0][yi]=psi0(y);
@@ -142,7 +186,6 @@ int main(void){
 	for(int ti=1;ti<=nt;ti++){
 		done = false;
 
-		//double t = tMin + ti*ht;
 		// show progress bar
 		float percentage = (float) ti/nt;
 		progress(percentage);
@@ -159,12 +202,6 @@ int main(void){
 													
 				matrix2[ti][yi] = (dy/(1.+(2.*dy)))*(matrix[ti][yi+1]+matrix[ti][yi-1]+matrix[ti-1][yi+1]+matrix[ti-1][yi-1])
 									+((1.-2.*dy)/(1.+2.*dy))*matrix[ti-1][yi];
-				
-				/*if( (t-0<tolerance) && ((y>0.59) || (y<-0.59) || ( (y>-0.41)&&(y<0.41) ) ) ){
-					matrix2[ti][yi] = 0;
-					matrix[ti][yi] = 0;
-				}*/
-
 
 				if( abs(matrix[ti][yi]-matrix2[ti][yi]) > tolerance ){
 					done = done & false;
@@ -175,14 +212,7 @@ int main(void){
 		}		
 	}
 	std::cout<<"\n";
-	// END OF Crank-Nicolson for |psiA+psiB|
-
-	/*for(int ei=0;ei<ne/2;ei++){
-		double initPos = (0.5-0.15)+(2*0.3/ne)*ei; //0.09, 0.18 // 0.2,0.4
-		elecMatrix[ei].setPos(initPos,0);
-		elecMatrix[ei+ne/2].setPos(-initPos,0);
-	}*/
-	
+	// END OF Crank-Nicolson for |psiA+psiB|	
 
 	// Electron trajectories
 	cout<<"Calculating electron trajectories...\n";
@@ -209,16 +239,15 @@ int main(void){
 			//cout<<ei<<"\t"<<ti<<"\t"<<elecMatrix[1].getPos(0)<<"\t"<<newY<<"\n";
 		}
 	}
-
 	// END of electron trajectories
 
 	// Export Data
 	cout<<"\nExporting data to file traj.dat...\n";
-	ofstream trajFile ("trajsquare.dat");
+	ofstream trajFile ("data/traj.dat");
 	for(int ei=0;ei<ne;ei++){
 		float percentage = (float) (ei+1)/ne;
 		progress(percentage);
-		for(int ti=0;ti<=nt;ti++){
+		for(int ti=0;ti<nt;ti++){
 			//matrixFile << ti <<"\n";
 
 			double t = (double) tMin + ti*ht;
@@ -229,10 +258,9 @@ int main(void){
 	trajFile.close();
 	std::cout<<"\n";
 
-	// Export Data
 	cout<<"Exporting data to file psi2.dat...\n";
-	ofstream psiFile ("psi2square.dat");
-	for(int ti=0;ti<=nt;ti++){
+	ofstream psiFile ("data/psi2.dat");
+	for(int ti=0;ti<nt;ti++){
 		float percentage = (float) ti/nt;
 		progress(percentage);
 		//matrixFile << ti <<"\n";
@@ -244,6 +272,26 @@ int main(void){
 		psiFile << "\n";
 	}
 	psiFile.close();
+	std::cout<<"\n";
+
+	cout<<"Exporting data to file histogram.dat...\n";
+	ofstream histFile ("data/histogram.dat");
+	for(int ei=0;ei<ne;ei++){
+		float percentage = (float) ei/ne;
+		progress(percentage);
+
+		int yIndex = findIndex(elecMatrix[ei].getPos(nt-1),ny,yMin,yMax);
+		electronBeam.increaseFreq(yIndex);
+		//cout<<electronBeam.getFreq(yIndex)<<"\n";
+	}
+
+	for (int yi=0; yi<=ny; yi++){
+		double y = (double) yMin + yi*hy;
+		histFile << y << "\t" << electronBeam.getFreq(yi) << "\n";
+	}
+		histFile << "\n";
+	
+	histFile.close();
 	std::cout<<"\n";
 	// END OF Export Data
 
@@ -259,8 +307,8 @@ int main(void){
 double psi0(double y){
 	double sigmay = 0.09; //um
 	double mu = 0.5; // um
-	//return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
-	return (fabs(y-mu)<sigmay)? 1 : (fabs(y+mu)<sigmay)? 1 : 0; // barrier
+	return 0.5*gaussian(y,-mu,sigmay)+0.5*gaussian(y,mu,sigmay);
+	//return (fabs(y-mu)<sigmay)? 1 : (fabs(y+mu)<sigmay)? 1 : 0; // barrier
 	//return 10*cos(y);	
 }
 
