@@ -34,7 +34,7 @@ const double ht = (double)(tMax-tMin)/nt;
 
 const complex<double> dy = D*ht/(2*hy*hy);
 
-const int ne = 5000;
+const int ne = 4000;
 
 bool done = false;
 
