@@ -137,7 +137,7 @@ reset
 	set palette rgbformula -7,-7,2
 	set cbrange [0:0.5]
 	
-   	plot	'data/traj.dat' every :::00::500 using 2:3:(0) notitle with line lw 0 dashtype 1 lc 4, \
+   	plot	'data/traj.dat' every :10::00::5000 using 2:3:(0) notitle with line lw 0 dashtype 1 lc 4, \
     		'data/trajPrev.dat' every :::00::2000 using (-$2):3:(0) notitle with line lw 0 dashtype 1 lc 4, \
     		'data/psi2.dat' every :::tt-1::tt-1 using (40*$4+36):3 notitle '\scriptsize Numeric' with line lw 4 dashtype 1
     		 
@@ -175,9 +175,10 @@ reset
 	
 	set xlabel 'Posici\''{o}n'
 	set ylabel 'Frecuencia' offset 0
+	set title '5000 Electrones'
 	
 	set xr [-5:5]
-	#set yr [0:8]
+	set yr [0:450]
 
 	#set ylabel 'ylabel 1' offset 1
 	#unset xlabel
