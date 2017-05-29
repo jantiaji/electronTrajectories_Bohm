@@ -1,5 +1,5 @@
 # data Files
-data/*
+data/*.dat
 
 # executables
 *.out
