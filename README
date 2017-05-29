@@ -11,7 +11,7 @@ psi2TYPE.dat. Columns are: time (ns), x-pos (cm), y-pos (nm), |psi(t,x,y)|^2
 trajTYPE.dat. Columns are: time (ns), x-pos (cm), y-pos (nm)
 	Every blank row accounts for a new electron.
 
-GNUPLOT is used to plot the wavefuncion as a function of time and electron trajectories. Edit "plots.gnu" as desired. To generate the plots, run "plotGen.sh". The plot will be stored in the file imgs/RENDER.pdf.
+GNUPLOT is used to plot the wavefuncion as a function of time and electron trajectories. Edit "plots.gnu" as desired. To generate the plots, run "plotGen.sh". The plot will be stored in the dummy file imgs/RENDER.pdf.
 
 File "cn2D.cpp" implements the Crank-Nicolson Method in 2D. It is not fully tested and is not used in our implementation.
 File "Random64.h" contains the Class Crandom that generates 64-bit random numbers. It was written by Jose Daniel Muñoz, Professor at Universidad Nacional de Colombia.
