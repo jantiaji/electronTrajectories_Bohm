@@ -24,8 +24,8 @@ const double tolerance = 1e-12;
 const double yMin = -10, yMax = 10; // um
 const double tMin = 0, tMax = 2; // ns
 
-const int ny = 1000;
-const int ny2 = 7000;
+const int ny = 1500;
+const int ny2 = 10000;
 const int nt = 500;
 
 const double hy = (double)(yMax-yMin)/ny;
@@ -34,7 +34,7 @@ const double ht = (double)(tMax-tMin)/nt;
 
 const complex<double> dy = D*ht/(2*hy*hy);
 
-const int ne = 9000;
+const int ne = 10000;
 
 bool done = false;
 
@@ -67,7 +67,7 @@ int findIndex(double num, int nNum, double min, double max);
 
 // Electron Beam
 class Beam{
-	int hist[ny];
+	int hist[ny2];
 
 public:
 	Beam();
@@ -76,7 +76,7 @@ public:
 };
 
 Beam::Beam(void){
-	for(int yi=0;yi<ny;yi++){
+	for(int yi=0;yi<ny2;yi++){
 		hist[yi]=0;
 	}
 };
@@ -273,13 +273,13 @@ int main(void){
 		float percentage = (float) ei/ne;
 		progress(percentage);
 
-		int yIndex = findIndex(elecMatrix[ei].getPos(nt-1),ny,yMin,yMax);
+		int yIndex = findIndex(elecMatrix[ei].getPos(nt-1),ny2,yMin,yMax);
 		electronBeam.increaseFreq(yIndex);
 		//cout<<electronBeam.getFreq(yIndex)<<"\n";
 	}
 
-	for (int yi=0; yi<=ny; yi++){
-		double y = (double) yMin + yi*hy;
+	for (int yi=0; yi<=ny2; yi++){
+		double y = (double) yMin + yi*hy2;
 		histFile << y << "\t" << electronBeam.getFreq(yi) << "\n";
 	}
 		histFile << "\n";

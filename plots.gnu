@@ -173,17 +173,17 @@ reset
 	
 	unset key
 	
-	set xlabel 'Posici\''{o}n'
-	set ylabel 'Frecuencia' offset 0
-	set title '10000 Electrones'
+	set xlabel 'Position'
+	set ylabel 'Frequency' offset 0
+	set title '10,000 Electrons'
 	
 	set xr [-7:7]
-	#set yr [0:550]
+	set yr [0:400]
 
 	#set ylabel 'ylabel 1' offset 1
 	#unset xlabel
 	plot 'data/histogram.dat' using 1:2 notitle '\scriptsize 850 V' with boxes lc 2, \
-		 'data/psi2.dat' every :::tt-1::tt-1 using 3:(5000*$4) notitle '\scriptsize Numeric' with line lw 4 dashtype 1 lc 3
+		 'data/psi2.dat' every :::tt-1::tt-1 using 3:(1500*$4) notitle '\scriptsize Numeric' with line lw 4 dashtype 1 lc 3
 	
 		
 	}
