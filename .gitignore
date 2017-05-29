@@ -3,3 +3,8 @@ data/*
 
 # executables
 *.out
+
+# Extras
+testGradient.cpp
+cn2D.cpp
+imgs/others/
