@@ -17,6 +17,6 @@ File "cn2D.cpp" implements the Crank-Nicolson Method in 2D. It is not fully test
 
 File "Random64.h" contains the Class Crandom that generates 64-bit random numbers. It was written by Jose Daniel Muñoz, Professor at Universidad Nacional de Colombia.
 
-May 24th: The function "getGradient" was changed to use Central Difference so the trajectories were symmetric.
+May 24: The function "getGradient" was changed to use Central Difference so the trajectories were symmetric.
 
-May 25th: The initial positions for the electrons were distributed according to the initial (gaussian or square) distribution of the wavefunction. Also, the spatial resolution in the y-direction was increased in order to enhance the calculation of the trajectories. The two aforementioned changes indeed resulted in an improved interference pattern.
+May 25: The initial positions for the electrons were distributed according to the initial (gaussian or square) distribution of the wavefunction. Also, the spatial resolution in the y-direction was increased in order to enhance the calculation of the trajectories. The two aforementioned changes indeed resulted in an improved interference pattern.
